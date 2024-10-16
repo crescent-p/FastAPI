@@ -28,3 +28,12 @@ async def root():
 async def get_posts():
     return {"myposts": "hello tehre my biod"}
 
+def find_post(id):
+    for i in my_posts:
+        if(i['id'] == id):
+            return i
+    return None
+
+@app.get('/posts/{id}')
+async def get_post(id: int):
+    return {'data': find_post(int(id))}
