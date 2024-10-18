@@ -10,7 +10,7 @@ from ..database import get_db
 router = APIRouter(prefix="/posts", tags=['posts'])
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
-async def create_post(posts: schemas.PostBase, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+async def create_post(posts: schemas.PostBase, db: Session = Depends(get_db), current_user: str = Depends(get_current_user)):
     new_post = models.Post(**posts.model_dump())
     db.add(new_post)
     db.commit()
