@@ -11,7 +11,7 @@ from ..database import  get_db
 
 from apps import utils
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse)
 async def create_user(user: UserCreate,db: Session = Depends(get_db)):
