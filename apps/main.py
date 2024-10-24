@@ -1,4 +1,4 @@
-from fastapi import  FastAPI
+from fastapi import  FastAPI, status
 from apps.routers import auth, posts, users, vote
 
 
@@ -16,6 +16,11 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all HTTP methods
     allow_headers=["*"],  # Allows all headers
 )
+
+@app.get('/', status_code=status.HTTP_200_OK)
+async def test():
+    return {"message": "all good boi!!"}
+
 app.include_router(vote.router)
 app.include_router(posts.router)
 app.include_router(users.router)
