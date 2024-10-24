@@ -8,11 +8,11 @@ class Post(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
-    published = Column(Boolean, default=True, server_default='TRUE')
+    published = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     owner = relationship("Users")
-    votes = Column(Integer, default=True, server_default='0')
+    votes = Column(Integer, default=0, server_default='0')
 
 class Users(Base):
     __tablename__ = "users"
