@@ -72,6 +72,7 @@ class StudentsOut(BaseModel):
 class Books(BaseModel):
     book_name: str
     author: str
+    author_id: int
     price: float
     rack_no: int
     no_of_books: Optional[int] = 1
@@ -95,4 +96,3 @@ class Author(BaseModel):
 class AuthorOut(Author):
     id: int
 
-    

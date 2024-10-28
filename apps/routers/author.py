@@ -13,6 +13,12 @@ router = APIRouter(prefix="/author", tags=['Author'])
 
 @router.post('/', response_model=schemas.AuthorOut)
 async def create_author(author: schemas.Author,db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+    
+    conflict = db.query(models.Author).where(models.Author.name == author.name).first()
+
+    if conflict:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A author with same name already exists!")
+    
     new_author = models.Author(**author.model_dump())
     
     db.add(new_author)
