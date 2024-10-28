@@ -69,9 +69,9 @@ class StudentsOut(BaseModel):
 
     class Config:
         from_attributes = True
+        
 class Books(BaseModel):
     book_name: str
-    author: str
     author_id: int
     price: float
     rack_no: int

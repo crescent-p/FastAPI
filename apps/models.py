@@ -42,7 +42,6 @@ class Books(Base):
     book_name = Column(String, nullable=False)
     book_code = Column(Integer, primary_key=True)
     author_id = Column(Integer, ForeignKey("author.id", ondelete="CASCADE"), nullable=False)
-    author = Column(String, nullable=False)
     date_of_arrival = Column(TIMESTAMP(timezone=True), server_default=func.now())
     price = Column(Float, nullable=False, default=0.0)
     rack_no = Column(Integer, default=0)

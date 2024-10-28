@@ -29,7 +29,7 @@ async def get_book_by_id(id:int, db: Session = Depends(get_db), current_user: in
     return query_res
 
 @router.get('/',response_model=List[schemas.BooksOut], status_code=status.HTTP_302_FOUND)
-async def get_all_books(db: Session = Depends(get_db),current_user: int = Depends(get_current_user)):
+async def get_all_books(db: Session = Depends(get_db), author_id: Optional[int] = 1,current_user: int = Depends(get_current_user)):
     
     query_res = db.query(models.Books).all()
     if not query_res:
