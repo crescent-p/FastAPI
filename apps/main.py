@@ -1,5 +1,5 @@
 from fastapi import  FastAPI, status
-from apps.routers import auth, posts, users, vote
+from apps.routers import auth, author, book_issues, books, students, users
 
 
 ##setting up the database. Creating the table and all
@@ -21,10 +21,12 @@ app.add_middleware(
 async def test():
     return {"message": "all good boi!!"}
 
-app.include_router(vote.router)
-app.include_router(posts.router)
 app.include_router(users.router)
 app.include_router(auth.router)
+app.include_router(students.router)
+app.include_router(books.router)
+app.include_router(book_issues.router)
+app.include_router(author.router)
 
 
 
