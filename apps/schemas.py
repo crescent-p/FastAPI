@@ -96,3 +96,9 @@ class Author(BaseModel):
 class AuthorOut(Author):
     id: int
 
+class StudentIssues(BaseModel):
+    student: StudentsOut
+    issue: IssuesOut
+
+    class Config:
+        from_attributes = True

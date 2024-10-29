@@ -18,17 +18,17 @@ async def create_an_issue(issue: schemas.Issues ,db: Session = Depends(get_db)):
     
     #check for that user and book, if any not present raise exception
     #after this check no of books. if no of books == 0 raise unavailable
-    user = db.query(models.Students).where(models.Students.id_no == issue.student_id).first()
-    if not user: 
+    student = db.query(models.Students).where(models.Students.id_no == issue.student_id).first()
+    if not student: 
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="That user doesn't exist")
     
     book = db.query(models.Books).where(models.Books.book_code == issue.book_id).first()
     if not book: 
          raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="That book doesn't exist")
     
-    userBookPair = db.query(models.Issue).where((models.Issue.book_id == issue.book_id) & (models.Issue.student_id == issue.student_id)).first()
+    studentBookPair = db.query(models.Issue).where((models.Issue.book_id == issue.book_id) & (models.Issue.student_id == issue.student_id)).first()
 
-    if userBookPair:
+    if studentBookPair:
         raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="This student already own a copy of this book.")
 
     book_count = book.no_of_books
