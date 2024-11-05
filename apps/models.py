@@ -3,8 +3,8 @@ from sqlalchemy import TIMESTAMP, Boolean, Column, Float, ForeignKey, Integer, S
 from sqlalchemy.orm import relationship
 from sqlalchemy import func, Interval
 
-class Users(Base):
-    __tablename__ = "users"
+class Admin(Base):
+    __tablename__ = "admin"
 
     id = Column(Integer, primary_key=True, nullable=False)
     email = Column(String, nullable=False, unique=True)
@@ -25,6 +25,7 @@ class Students(Base):
     id_no = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     address = Column(String, nullable=False)
+    email = Column(String, nullable=False)
     date_of_issue = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
     date_of_expiry = Column(TIMESTAMP(timezone=True), server_default=func.now() + text("interval '1 year'"))
     status = Column(String, default="Permanent", nullable=False)
@@ -34,7 +35,8 @@ class Author(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
+    phone_number = Column(String, nullable=False)
+    email = Column(String, nullable=False)
 
 class Books(Base):
     __tablename__ = "books"

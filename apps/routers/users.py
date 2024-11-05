@@ -16,11 +16,11 @@ router = APIRouter(prefix="/users", tags=["Users"])
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse)
 async def create_user(user: UserCreate,db: Session = Depends(get_db)):
     
-    if(db.query(models.Users).where(models.Users.email==user.email).first()):
+    if(db.query(models.Admin).where(models.Admin.email==user.email).first()):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A email with same address exists")
     
     user.password = utils.hash(user.password)
-    new_user = models.Users(**user.model_dump())
+    new_user = models.Admin(**user.model_dump())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -28,7 +28,7 @@ async def create_user(user: UserCreate,db: Session = Depends(get_db)):
 
 @router.get('/{id}', status_code=status.HTTP_302_FOUND, response_model= schemas.UserResponse)
 async def get_user(id: int, db: Session = Depends(get_db)):
-    user = db.query(models.Users).where(models.Users.id == id).first()
+    user = db.query(models.Admin).where(models.Admin.id == id).first()
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The given id couldn't be found")
