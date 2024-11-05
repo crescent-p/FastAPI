@@ -48,6 +48,13 @@ class Books(Base):
     no_of_books = Column(Integer, default=0)
 
 
+class Request(Base):
+    __tablename__ = "request"
+
+    book_name = Column(String, nullable=False)
+    ISBN = Column(String, nullable=False, primary_key=True)
+
+
 
 
 

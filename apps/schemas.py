@@ -102,3 +102,11 @@ class StudentIssues(BaseModel):
 
     class Config:
         from_attributes = True
+
+class Request(BaseModel):
+    book_name: str
+    ISBN: str
+
+class RequestOut(Request):
+    class Config:
+        from_attributes = True

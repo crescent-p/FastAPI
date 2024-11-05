@@ -1,5 +1,5 @@
 from fastapi import  FastAPI, status
-from apps.routers import auth, author, book_issues, books, students, users
+from apps.routers import auth, author, book_issues, books, request, students, users
 
 
 ##setting up the database. Creating the table and all
@@ -27,6 +27,7 @@ app.include_router(students.router)
 app.include_router(books.router)
 app.include_router(book_issues.router)
 app.include_router(author.router)
+app.include_router(request.router)
 
 
 
