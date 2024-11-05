@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends, Response, status, HTTPException
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from apps import schemas
-from apps.oauth import get_current_user
 from apps.schemas import PostBase
 from .. import models
 from ..database import get_db
@@ -32,7 +31,7 @@ async def get_all_students(db: Session = Depends(get_db), limit: int = 10, name:
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.StudentsOut)
-async def create_student(user: schemas.Students, db: Session = Depends(get_db), current_user: models.Users = Depends(get_current_user)):
+async def create_student(user: schemas.Students, db: Session = Depends(get_db)):
 
     if db.query(models.Students).where(models.Students.name == user.name).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="This username is taken!")
@@ -52,7 +51,7 @@ async def create_student(user: schemas.Students, db: Session = Depends(get_db), 
 
 
 @router.delete('/{id}', status_code=status.HTTP_200_OK, response_model=schemas.StudentsOut)
-async def delete_student(id: int, db: Session = Depends(get_db), current_user: models.Users = Depends(get_current_user)):
+async def delete_student(id: int, db: Session = Depends(get_db)):
     student = db.query(models.Students).where(models.Students.id_no == id)
 
     if not student.first():

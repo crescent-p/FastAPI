@@ -8,7 +8,7 @@ from apps import models, schemas
 from apps.database import get_db
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 
 SECRET_KEY = settings.secret_key
@@ -41,11 +41,11 @@ def verify_access_token(token: str, credential_exception):
         raise credential_exception
     return token_data
     
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Couldn't verify token")
+# def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+#     credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Couldn't verify token")
 
-    token = verify_access_token(token, credential_exception=credential_exception)
+#     token = verify_access_token(token, credential_exception=credential_exception)
 
-    user = db.query(models.Users).where(models.Users.id == token.id).first()
+#     user = db.query(models.Users).where(models.Users.id == token.id).first()
 
-    return user
+#     return user
