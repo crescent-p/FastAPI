@@ -28,3 +28,16 @@ async def create_a_request(issue: schemas.Request ,db: Session = Depends(get_db)
     db.refresh(new_request)
 
     return new_request
+
+
+@router.delete('/{request_id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_request(request_id: int, db: Session = Depends(get_db)):
+    request_to_delete = db.query(models.Request).filter(models.Request.id == request_id).first()
+
+    if not request_to_delete:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Request not found")
+
+    db.delete(request_to_delete)
+    db.commit()
+
+    return {"detail": "Request deleted successfully"}

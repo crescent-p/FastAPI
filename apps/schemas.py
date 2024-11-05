@@ -91,7 +91,9 @@ class IssuesOut(Issues):
 
 class Author(BaseModel):
     name: str
-    age: int 
+    email: str
+    phone_number: str
+
 
 class AuthorOut(Author):
     id: int

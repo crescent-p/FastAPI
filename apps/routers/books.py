@@ -12,6 +12,11 @@ router = APIRouter(prefix="/books", tags=['books'])
 @router.post('/', response_model=schemas.BooksOut, status_code=status.HTTP_201_CREATED)
 async def add_book(book: schemas.Books, db: Session = Depends(get_db)):
 
+    author = db.query(models.Author).filter(models.Author.id == book.author_id).first()
+
+    if not author:
+        raise HTTPException(detail="The provided author doesnt exist", status_code=status.HTTP_404_NOT_FOUND)
+
     new_book = models.Books(**book.model_dump())
     db.add(new_book)
     db.commit()
@@ -28,9 +33,9 @@ async def get_book_by_id(id:int, db: Session = Depends(get_db)):
     return query_res
 
 @router.get('/',response_model=List[schemas.BooksOut], status_code=status.HTTP_302_FOUND)
-async def get_all_books(db: Session = Depends(get_db), author_id: Optional[int] = 1):
+async def get_all_books(db: Session = Depends(get_db), book_name: str = "", author_id: Optional[int] = 1):
     
-    query_res = db.query(models.Books).all()
+    query_res = db.query(models.Books).filter(models.Books.book_name.contains(book_name)).all()
     if not query_res:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No books currently exist in library!")
     return query_res

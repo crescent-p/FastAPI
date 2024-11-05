@@ -46,3 +46,21 @@ async def create_an_issue(issue: schemas.Issues ,db: Session = Depends(get_db)):
     db.refresh(new_issue)
 
     return new_issue
+
+@router.delete('/', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_an_issue(issue_id: int, db: Session = Depends(get_db)):
+    issue = db.query(models.Issue).filter(models.Issue.id == issue_id).first()
+    
+    if not issue:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Issue not found")
+    
+    book = db.query(models.Books).filter(models.Books.book_code == issue.book_id).first()
+    
+    if book:
+        book.no_of_books += 1
+        db.commit()
+        db.refresh(book)
+    
+    db.delete(issue)
+    db.commit()
+    
