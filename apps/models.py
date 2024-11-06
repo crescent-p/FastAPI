@@ -25,6 +25,7 @@ class Students(Base):
     id_no = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     address = Column(String, nullable=False)
+    phone_number = Column(String, nullable=False)
     email = Column(String, nullable=False)
     date_of_issue = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
     date_of_expiry = Column(TIMESTAMP(timezone=True), server_default=func.now() + text("interval '1 year'"))

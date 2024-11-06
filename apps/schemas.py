@@ -54,8 +54,12 @@ class Vote(BaseModel):
     post_id: int
     dir: conint(ge=0, le=1)
 
+
 class Students(BaseModel):
     name: str
+    address: str
+    email: str
+    phone_number: str
     address: str
     status: Optional[conint(ge=0, le=1)] #0 means temporary 1 means Permanent
 
@@ -63,6 +67,8 @@ class StudentsOut(BaseModel):
     id_no: int
     name: str
     address: str
+    email: str
+    phone_number: str
     status: str
     date_of_issue: datetime
     date_of_expiry: datetime

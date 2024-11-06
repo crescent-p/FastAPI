@@ -29,7 +29,7 @@ async def get_all_students(db: Session = Depends(get_db), limit: int = 10, name:
     query_res = db.query(models.Students).filter(models.Students.name.contains(name)).limit(limit=limit).all()
     return query_res
 
-
+#fix studentsOut
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.StudentsOut)
 async def create_student(user: schemas.Students, db: Session = Depends(get_db)):
 
