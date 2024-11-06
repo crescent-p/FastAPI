@@ -48,8 +48,9 @@ async def create_an_issue(issue: schemas.Issues ,db: Session = Depends(get_db)):
     return new_issue
 
 @router.delete('/', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_an_issue(issue_id: int, db: Session = Depends(get_db)):
-    issue = db.query(models.Issue).filter(models.Issue.id == issue_id).first()
+async def delete_an_issue( student_id: int, book_id: int, db: Session = Depends(get_db)):
+    from sqlalchemy import and_
+    issue = db.query(models.Issue).filter(and_(models.Issue.student_id == student_id, models.Issue.book_id == book_id)).first()
     
     if not issue:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Issue not found")
