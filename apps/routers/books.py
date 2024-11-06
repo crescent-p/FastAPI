@@ -35,7 +35,7 @@ async def get_book_by_id(id:int, db: Session = Depends(get_db)):
 @router.get('/',response_model=List[schemas.BooksOut], status_code=status.HTTP_302_FOUND)
 async def get_all_books(db: Session = Depends(get_db), book_name: str = ""):
     
-    query_res = db.query(models.Books).filter(models.Books.book_name.contains(book_name)).all()
+    query_res = db.query(models.Books).filter(func.lower(models.Books.book_name).contains(func.lower(book_name))).all()
     if not query_res:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No books currently exist in library!")
     return query_res
