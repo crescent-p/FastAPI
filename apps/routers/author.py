@@ -16,7 +16,7 @@ async def create_author(author: schemas.Author,db: Session = Depends(get_db)):
     conflict = db.query(models.Author).where(models.Author.name == author.name).first()
 
     if conflict:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A author with same name already exists!")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="An author with same name already exists!")
     
     new_author = models.Author(**author.model_dump())
     
@@ -31,4 +31,11 @@ async def get_author(id: int, db: Session = Depends(get_db)):
     author = db.query(models.Author).where(models.Author.id == id).first()
     if not author:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The Author with id doesn't exist!")
+    return author
+
+@router.get('/', response_model=List[schemas.AuthorOut])
+async def get_all_authors(db: Session = Depends(get_db)):
+    author = db.query(models.Author).all()
+    if not author:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No Author currently exists!")
     return author
