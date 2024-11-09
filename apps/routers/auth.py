@@ -12,7 +12,7 @@ from apps.schemas import UserCreate
 router = APIRouter(tags=['Authentication'])
 
 
-@router.get('/login', response_model=schemas.Token)
+@router.post('/login', response_model=schemas.Token)
 async def login_user(user_detail: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     query_res= db.query(models.Admin).where(models.Admin.email == user_detail.username).first()
     
