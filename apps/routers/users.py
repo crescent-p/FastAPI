@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from apps import schemas
+from apps.oauth import get_current_user
 from apps.schemas import UserCreate
 from .. import models
 from ..database import  get_db
@@ -27,7 +28,7 @@ async def create_user(user: UserCreate,db: Session = Depends(get_db)):
     return new_user
 
 @router.get('/{id}', status_code=status.HTTP_302_FOUND, response_model= schemas.UserResponse)
-async def get_user(id: int, db: Session = Depends(get_db)):
+async def get_user(id: int, db: Session = Depends(get_db), current_user: get_current_user = Depends()):
     user = db.query(models.Admin).where(models.Admin.id == id).first()
 
     if not user:
