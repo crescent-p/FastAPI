@@ -8,7 +8,7 @@ from apps import models, schemas
 from apps.database import get_db
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
 
 SECRET_KEY = settings.secret_key

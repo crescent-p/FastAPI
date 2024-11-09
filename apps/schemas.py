@@ -92,6 +92,8 @@ class Issues(BaseModel):
     book_id: int
 
 class IssuesOut(Issues):
+    student: StudentsOut 
+    book: BooksOut
     issue_date: datetime
     due_date: datetime
 
