@@ -7,7 +7,48 @@ from ..database import get_db
 
 router = APIRouter(prefix="/bookissues", tags=["BookIssues"])
 @router.get('/', status_code=status.HTTP_200_OK, response_model=List[schemas.IssuesOut])
-async def get_all_issues(db: Session = Depends(get_db)):
+async def get_all_issues(db: Session = Depends(get_db), student_id: int = -1):
+
+    if(student_id != -1):
+        issues = (
+        db.query(models.Issue, models.Students, models.Books)
+        .join(models.Students, models.Issue.student_id == models.Students.id_no)
+        .join(models.Books, models.Issue.book_id == models.Books.book_code)
+        .filter(models.Students.id_no == student_id)
+        .all()
+        )
+
+        formatted_issues = [
+        {
+            "student_id": issue.student_id,      # Add student_id directly from Issue model
+            "book_id": issue.book_id,            # Add book_id directly from Issue model
+            "issue_date": issue.issue_date,
+            "due_date": issue.due_date,
+            "student": {
+                "id_no": student.id_no,
+                "name": student.name,
+                "address": student.address,
+                "email": student.email,
+                "phone_number": student.phone_number,
+                "status": student.status,
+                "date_of_issue": student.date_of_issue,
+                "date_of_expiry": student.date_of_expiry
+            },
+            "book": {
+                "book_name": book.book_name,
+                "book_code": book.book_code,
+                "author_id": book.author_id,
+                "price": book.price,
+                "rack_no": book.rack_no,
+                "no_of_books": book.no_of_books,
+                "date_of_arrival": book.date_of_arrival
+            }
+        }
+        for issue, student, book in issues  # Unpacking each tuple into variables
+    ]
+    
+        return formatted_issues
+
     issues = (
         db.query(models.Issue, models.Students, models.Books)
         .join(models.Students, models.Issue.student_id == models.Students.id_no)
