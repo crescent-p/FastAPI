@@ -84,6 +84,8 @@ class Books(BaseModel):
     no_of_books: Optional[int] = 1
 
 class BooksOut(Books):
+    book_name: str
+    author_name: str
     book_code: int
     date_of_arrival: datetime
 

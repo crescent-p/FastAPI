@@ -27,18 +27,53 @@ async def add_book(book: schemas.Books, db: Session = Depends(get_db)):
 @router.get('/{id}', response_model=schemas.BooksOut, status_code=status.HTTP_302_FOUND)
 async def get_book_by_id(id:int, db: Session = Depends(get_db)):
     
-    query_res = db.query(models.Books).where(models.Books.book_code == id).first()
+    query_res = db.query(models.Books, models.Author).join(models.Author, models.Author.id == models.Books.author_id).where(models.Books.book_code == id).first()
+    
     if not query_res:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The book with id: {id} doesn't exist!")
-    return query_res
+    
 
-@router.get('/',response_model=List[schemas.BooksOut], status_code=status.HTTP_302_FOUND)
+    book = query_res[0]
+    author = query_res[1]
+
+    final_res = {
+        "price": book.price,
+        "rack_no": book.rack_no,
+        "author_id": book.author_id,
+        "book_name": book.book_name,
+        "book_code": book.book_code,
+        "author_name": author.name,  # Assuming 'name' is the field for the author's name in the Author model
+        "book_code": book.book_code,  # Assuming 'book_code' is available in Books model
+        "date_of_arrival": book.date_of_arrival  # Assuming 'date_of_arrival' exists in the Books model
+    }
+
+    return final_res
+
+
+
+
+
+
+@router.get('/', response_model=List[schemas.BooksOut], status_code=status.HTTP_302_FOUND)
 async def get_all_books(db: Session = Depends(get_db), book_name: str = ""):
     
-    query_res = db.query(models.Books).filter(func.lower(models.Books.book_name).contains(func.lower(book_name))).all()
+    query_res = db.query(models.Books, models.Author).join(models.Author, models.Author.id == models.Books.author_id).filter(func.lower(models.Books.book_name).contains(func.lower(book_name))).all()
+    
     if not query_res:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No books currently exist in library!")
-    return query_res
+    
+    final_res = [{
+        "price": book.price,
+        "rack_no": book.rack_no,
+        "author_id": book.author_id,
+        "book_name": book.book_name,
+        "book_code": book.book_code,
+        "author_name": author.name,  # Assuming 'name' is the field for the author's name in the Author model
+        "book_code": book.book_code,  # Assuming 'book_code' is available in Books model
+        "date_of_arrival": book.date_of_arrival  # Assuming 'date_of_arrival' exists in the Books model
+    } for book, author in query_res]
+
+    return final_res
 
 @router.delete('/{id}', response_model=schemas.BooksOut, status_code=status.HTTP_200_OK)
 async def delete_book_by_id(id: int, db: Session = Depends(get_db)):
