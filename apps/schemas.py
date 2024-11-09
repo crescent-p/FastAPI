@@ -108,7 +108,7 @@ class AuthorOut(Author):
 
 class StudentIssues(BaseModel):
     student: StudentsOut
-    issue: IssuesOut
+    issue: Issues
 
     class Config:
         from_attributes = True

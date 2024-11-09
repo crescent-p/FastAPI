@@ -48,7 +48,7 @@ async def get_all_issues(db: Session = Depends(get_db)):
     return formatted_issues
 
 
-@router.post('/', response_model=schemas.IssuesOut, status_code=status.HTTP_201_CREATED)
+@router.post('/', response_model=schemas.Issues, status_code=status.HTTP_201_CREATED)
 async def create_an_issue(issue: schemas.Issues ,db: Session = Depends(get_db)):
     
     #check for that user and book, if any not present raise exception
@@ -80,31 +80,7 @@ async def create_an_issue(issue: schemas.Issues ,db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_issue)
 
-    student_book = (
-        db.query(models.Issue)
-        .join(models.Students, models.Issue.student_id == models.Students.id_no)  # Join Issue with Students on student_id
-        .join(models.Books, models.Issue.book_id == models.Books.book_code)  # Join Issue with Books on book_id
-        .with_entities(
-            models.Issue.issue_date,
-            models.Issue.due_date,
-            models.Students.name.label("student_name"),
-            models.Students.id_no.label("student_id"),
-            models.Books.book_name.label("book_name"),
-            models.Books.book_code.label("book_id")
-        ).filter(models.Issue.book_id == issue.book_id & models.Issue.student_id == issue.student_id)
-        .first()
-    )
-    
-    # Format the issues to match the IssuesOut schema
-    formatted_issues = {
-            "id": student_book.id,
-            "issue_date": student_book.issue_date,
-            "due_date": student_book.due_date,
-            "student": {"name": student_book.student_name, "id_no": student_book.student_id},
-            "book": {"book_name": student_book.book_name, "book_code": student_book.book_id}
-        }
-
-    return formatted_issues
+    return new_issue
 
 @router.delete('/', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_an_issue( student_id: int, book_id: int, db: Session = Depends(get_db)):
