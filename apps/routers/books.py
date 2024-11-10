@@ -67,6 +67,7 @@ async def get_all_books(db: Session = Depends(get_db), book_name: str = ""):
         "rack_no": book.rack_no,
         "author_id": book.author_id,
         "book_name": book.book_name,
+        "no_of_books": book.no_of_books,
         "book_code": book.book_code,
         "author_name": author.name,  # Assuming 'name' is the field for the author's name in the Author model
         "book_code": book.book_code,  # Assuming 'book_code' is available in Books model
