@@ -75,7 +75,7 @@ async def get_all_books(db: Session = Depends(get_db), book_name: str = ""):
 
     return final_res
 
-@router.delete('/{id}', response_model=schemas.BooksOut, status_code=status.HTTP_200_OK)
+@router.delete('/{id}', response_model=schemas.Books, status_code=status.HTTP_200_OK)
 async def delete_book_by_id(id: int, db: Session = Depends(get_db)):
     query = db.query(models.Books).where(models.Books.book_code == id)
 
