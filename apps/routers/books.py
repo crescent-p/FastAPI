@@ -9,7 +9,7 @@ from ..database import get_db
 
 router = APIRouter(prefix="/books", tags=['books'])
 
-@router.post('/', response_model=schemas.BooksOut, status_code=status.HTTP_201_CREATED)
+@router.post('/', response_model=schemas.Books, status_code=status.HTTP_201_CREATED)
 async def add_book(book: schemas.Books, db: Session = Depends(get_db)):
 
     author = db.query(models.Author).filter(models.Author.id == book.author_id).first()
