@@ -1,5 +1,5 @@
 [Unit]
-Description=fastapi service
+Description=busapp service
 After=network.target
 
 [Service]

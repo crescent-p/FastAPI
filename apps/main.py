@@ -1,11 +1,12 @@
 from fastapi import  FastAPI, status
+from apps import models
 from apps.routers import auth, author, book_issues, books, request, students, users
 
 
 ##setting up the database. Creating the table and all
-# models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=models.engine)
 from fastapi.middleware.cors import CORSMiddleware
-
+s
 app = FastAPI()
 
 # Configure CORS
